@@ -69,7 +69,7 @@ namespace Integration.Controllers
                 string fullName = rawName[1];
 
                 //string[] rawEmailText = arrayOfStr[1].Split(':');
-                //string email= rawEmailText[1];
+                //string email=rawEmailText[1];
 
                 string[] rawMessage = arrayOfStr[2].Split(':');
                 string contactInfo = rawMessage[1];
