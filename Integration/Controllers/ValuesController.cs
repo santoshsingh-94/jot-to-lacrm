@@ -55,28 +55,39 @@ namespace Integration.Controllers
                 myForm.Type = formData["type"];
 
 
+                string[] webhook = myForm.WebhookURL.Split("website=");
+                if (webhook.Length > 0) {
+                    contactForm.Website = new[] { new Websites() { Text = webhook[1] } };
+                }
+                
+                
+
                 string personDetails = myForm.Pretty;
                 string[] arrayOfStr = personDetails.Split(',');
 
-                string[] rawName = arrayOfStr[0].Split(':');
+                string[] rawName = arrayOfStr[1].Split(':');
                 string fullName = rawName[1];
 
-                string[] rawEmailText = arrayOfStr[1].Split(':');
-                string email = rawEmailText[1];
+                //string[] rawEmailText = arrayOfStr[1].Split(':');
+                //string email= rawEmailText[1];
 
                 string[] rawMessage = arrayOfStr[2].Split(':');
-                string message = rawMessage[1];                
+                string contactInfo = rawMessage[1];
+                string[] phoneEmail = contactInfo.Split(' ');
+                string phone = phoneEmail[0];
+                string email = phoneEmail[1];
 
                 contactForm.FullName = fullName;
+                contactForm.Email = new [] { new Emails() { Text=email,Type=""}/*, new Emails() { }*/};
 
-                contactForm.Email = new EmailDetail() { Text = email, Type = "Work" };
+                contactForm.Phone = new[] { new Phones() { Text = phone, Type = "" } };
+                
                 
                 //contactForm.Message = message;
             }
             //Posting Data To the lessannoyingcrm API
 
             var serializedData = JsonConvert.SerializeObject(contactForm);
-                        
             var url = "https://api.lessannoyingcrm.com?UserCode=807AB&APIToken=H3RSW2TCRK0QN3KY71DMR1GF2RZ1BTSRP8T9W18KQJK7JPV4F8&Function=CreateContact";
 
             var postData = new List<KeyValuePair<string, string>>();
@@ -109,6 +120,12 @@ namespace Integration.Controllers
         {
         }
     }
+    //public class Emails
+    //{
+
+    //    public string Text { get; set; }
+    //    public string Type { get; set; }
+    //}
     //public class Parameter
     //{
     //    public string FullName { get; set; }
